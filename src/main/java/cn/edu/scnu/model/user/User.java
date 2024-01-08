@@ -1,4 +1,4 @@
-package cn.edu.scnu.model;
+package cn.edu.scnu.model.user;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Data
 public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1177319214665217813L;
 
     @TableId(type = IdType.AUTO)
     /* 解决 This primary key of "id" is primitive !不建议如此请使用包装类 */

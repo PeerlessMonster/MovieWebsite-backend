@@ -1,7 +1,7 @@
 package cn.edu.scnu.service;
 
 import cn.edu.scnu.dao.UserDao;
-import cn.edu.scnu.model.User;
+import cn.edu.scnu.model.user.User;
 import cn.edu.scnu.util.Password;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

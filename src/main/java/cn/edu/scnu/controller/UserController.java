@@ -1,16 +1,13 @@
 package cn.edu.scnu.controller;
 
 import cn.edu.scnu.model.ErrorResponse;
-import cn.edu.scnu.model.LoginRequest;
-import cn.edu.scnu.model.RegisterRequest;
-import cn.edu.scnu.model.User;
+import cn.edu.scnu.model.user.LoginRequest;
+import cn.edu.scnu.model.user.RegisterRequest;
+import cn.edu.scnu.model.user.User;
 import cn.edu.scnu.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -20,7 +17,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/users")
     public ErrorResponse register(@RequestBody RegisterRequest request, HttpServletResponse response) {
         String name = request.getName();
         String email = request.getEmail();
@@ -34,12 +31,14 @@ public class UserController {
         return new ErrorResponse("");
     }
 
-    @PostMapping("/logout")
-    public void logout(HttpSession session) {
+    @DeleteMapping("/users/sessions")
+    public ErrorResponse logout(HttpSession session) {
         session.removeAttribute("user");
+
+        return new ErrorResponse("");
     }
 
-    @PostMapping("/login")
+    @PostMapping("/users/sessions")
     public Object login(@RequestBody LoginRequest request, HttpSession session, HttpServletResponse response) {
         String username = request.getUsername();
         String password = request.getPassword();
@@ -52,7 +51,7 @@ public class UserController {
         }
 
         User user = userService.getJustNowUser();
-        user.setPasswordHash("");
+        user.setPasswordHash(null);
         session.setAttribute("user", user);
         if (isRemember) {
             session.setMaxInactiveInterval(604800);
@@ -61,11 +60,12 @@ public class UserController {
         return user;
     }
 
-    @GetMapping("/user")
-    public User getAllInfo(HttpSession session, HttpServletResponse response) {
+    @GetMapping("/users")
+    public Object sendSession(HttpSession session, HttpServletResponse response) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             response.setStatus(401);
+            return new ErrorResponse("未登录账号！");
         }
         return user;
     }

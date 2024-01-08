@@ -1,4 +1,4 @@
-package cn.edu.scnu.model;
+package cn.edu.scnu.model.user;
 
 public class LoginRequest {
     private String username;
