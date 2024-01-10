@@ -4,14 +4,16 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
-@TableName("CarouselMovieView")
-public class CarouselMovie implements Serializable {
-    private static final long serialVersionUID = -8319055271091465535L;
-
+@TableName("PopularMovieView")
+public class PopularMovie {
     @TableId()
     private Integer id;
     private String name;
+    private String category;
+    private Timestamp releaseTime;
+    private int playAmount;
+    private float score;
 }

@@ -7,11 +7,12 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@TableName("CarouselMovieView")
-public class CarouselMovie implements Serializable {
-    private static final long serialVersionUID = -8319055271091465535L;
+@TableName("LatestMovieView")
+public class LatestMovie implements Serializable {
+    private static final long serialVersionUID = -4179950950079037337L;
 
     @TableId()
     private Integer id;
     private String name;
+    private float score;
 }
