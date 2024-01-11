@@ -1,11 +1,9 @@
 package cn.edu.scnu.controller;
 
 import cn.edu.scnu.model.movie.*;
-import cn.edu.scnu.service.CarouselMovieService;
-import cn.edu.scnu.service.LatestMovieService;
-import cn.edu.scnu.service.PopularMovieService;
-import cn.edu.scnu.service.TopScoreMovieService;
+import cn.edu.scnu.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
@@ -20,12 +18,14 @@ public class MovieController {
     private LatestMovieService latestMovieService;
     private TopScoreMovieService topScoreMovieService;
     private PopularMovieService popularMovieService;
+    private MovieDetailService movieDetailService;
 
-    public MovieController(CarouselMovieService carouselMovieService, LatestMovieService latestMovieService, TopScoreMovieService topScoreMovieService, PopularMovieService popularMovieService) {
+    public MovieController(CarouselMovieService carouselMovieService, LatestMovieService latestMovieService, TopScoreMovieService topScoreMovieService, PopularMovieService popularMovieService, MovieDetailService movieDetailService) {
         this.carouselMovieService = carouselMovieService;
         this.latestMovieService = latestMovieService;
         this.topScoreMovieService = topScoreMovieService;
         this.popularMovieService = popularMovieService;
+        this.movieDetailService = movieDetailService;
     }
 
     @GetMapping("/movies/carousels")
@@ -46,5 +46,10 @@ public class MovieController {
     @GetMapping("/movies/populars")
     public List<MovieBriefIntroResponse> sendPopular() {
         return popularMovieService.selectAll();
+    }
+
+    @GetMapping("/movies/{id}")
+    public MovieDetailResponse sendDetail(@PathVariable("id") int id) {
+        return movieDetailService.selectById(id);
     }
 }

@@ -15,8 +15,13 @@ public class MovieDetail {
     private String name;
     private String category;
     private String region;
-    private String crew;
+    private String director;
+    private String scriptwriter;
+    private String actor;
     private Timestamp releaseTime;
-    private Integer duration;
+    private int duration;
+    private String description;
+    private int playAmount;
     private float score;
+    private int vip;
 }

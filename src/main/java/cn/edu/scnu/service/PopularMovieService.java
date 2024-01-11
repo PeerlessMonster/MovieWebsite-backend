@@ -3,6 +3,7 @@ package cn.edu.scnu.service;
 import cn.edu.scnu.dao.PopularMovieDao;
 import cn.edu.scnu.model.movie.MovieBriefIntroResponse;
 import cn.edu.scnu.model.movie.PopularMovie;
+import cn.edu.scnu.util.TimestampFormat;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,10 @@ public class PopularMovieService extends ServiceImpl<PopularMovieDao, PopularMov
     public List<MovieBriefIntroResponse> selectAll() {
         List<MovieBriefIntroResponse> responseMovieList = new ArrayList<>();
 
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-
         List<PopularMovie> popularMovies = this.list();
         for (PopularMovie popularMovie: popularMovies) {
             Timestamp timestamp = popularMovie.getReleaseTime();
-            String releaseTime = sdf.format(timestamp);
+            String releaseTime = TimestampFormat.formatString(timestamp);
 
             MovieBriefIntroResponse responseMovie = new MovieBriefIntroResponse(
                     popularMovie.getId(),
