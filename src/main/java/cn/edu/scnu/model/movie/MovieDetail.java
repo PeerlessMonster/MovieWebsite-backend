@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 
 @Data
 @TableName("movie")
-public class MovieDetail {
+public class MovieDetail extends MovieBriefIntro {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name;

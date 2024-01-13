@@ -1,8 +1,10 @@
 package cn.edu.scnu.model.movie;
 
+import cn.edu.scnu.util.TimestampFormat;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 public class MovieBriefIntroResponse implements Serializable {
@@ -22,5 +24,17 @@ public class MovieBriefIntroResponse implements Serializable {
         this.releaseTime = releaseTime;
         this.playAmount = playAmount;
         this.score = score;
+    }
+
+    public MovieBriefIntroResponse(MovieBriefIntro movieBriefIntro) {
+        Timestamp timestamp = movieBriefIntro.getReleaseTime();
+        String releaseTime = TimestampFormat.formatString(timestamp);
+
+        this.id = movieBriefIntro.getId();
+        this.name = movieBriefIntro.getName();
+        this.category = movieBriefIntro.getCategory();
+        this.releaseTime = releaseTime;
+        this.playAmount = movieBriefIntro.getPlayAmount();
+        this.score = movieBriefIntro.getScore();
     }
 }

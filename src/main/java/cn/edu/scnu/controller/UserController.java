@@ -28,13 +28,15 @@ public class UserController {
             response.setStatus(401);
             return new ErrorResponse(message);
         }
+        response.setStatus(201);
         return new ErrorResponse("");
     }
 
     @DeleteMapping("/users/sessions")
-    public ErrorResponse logout(HttpSession session) {
+    public ErrorResponse logout(HttpSession session, HttpServletResponse response) {
         session.removeAttribute("user");
 
+        response.setStatus(204);
         return new ErrorResponse("");
     }
 
@@ -57,6 +59,7 @@ public class UserController {
             session.setMaxInactiveInterval(604800);
             // 604800 seconds = 7 days
         }
+        response.setStatus(201);
         return user;
     }
 
@@ -67,6 +70,7 @@ public class UserController {
             response.setStatus(401);
             return new ErrorResponse("未登录账号！");
         }
+        response.setStatus(200);
         return user;
     }
 }

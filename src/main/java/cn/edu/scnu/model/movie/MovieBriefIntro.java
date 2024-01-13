@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Data
 @TableName("PopularMovieView")
-public class PopularMovie {
+public class MovieBriefIntro {
     @TableId()
     private Integer id;
     private String name;
