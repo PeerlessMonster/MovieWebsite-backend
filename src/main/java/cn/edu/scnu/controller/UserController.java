@@ -2,7 +2,7 @@ package cn.edu.scnu.controller;
 
 import cn.edu.scnu.model.ErrorResponse;
 import cn.edu.scnu.model.user.LoginRequest;
-import cn.edu.scnu.model.user.RegisterRequest;
+import cn.edu.scnu.model.user.UserRequest;
 import cn.edu.scnu.model.user.User;
 import cn.edu.scnu.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,14 +18,14 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ErrorResponse register(@RequestBody RegisterRequest request, HttpServletResponse response) {
+    public ErrorResponse register(@RequestBody UserRequest request, HttpServletResponse response) {
         String name = request.getName();
         String email = request.getEmail();
         String password = request.getPassword();
 
         String message = userService.saveRegister(name, email, password);
         if (message != null) {
-            response.setStatus(401);
+            response.setStatus(400);
             return new ErrorResponse(message);
         }
         response.setStatus(201);
@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public Object sendSession(HttpSession session, HttpServletResponse response) {
+    public Object selectInfo(HttpSession session, HttpServletResponse response) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             response.setStatus(401);
@@ -72,5 +72,38 @@ public class UserController {
         }
         response.setStatus(200);
         return user;
+    }
+
+    @PutMapping("/users")
+    public ErrorResponse updateInfo(@RequestBody UserRequest request, HttpSession session, HttpServletResponse response) {
+        String name = request.getName();
+        if (name == null) {
+            name = "";
+        }
+        String email = request.getEmail();
+
+        User user = (User) session.getAttribute("user");
+        user.setName(name);
+        user.setEmail(email);
+        String message = userService.tryUpdate(user);
+        if (message != null) {
+            response.setStatus(400);
+            return new ErrorResponse(message);
+        }
+
+        session.setAttribute("user", user);
+        response.setStatus(200);
+        return new ErrorResponse("");
+    }
+
+    @PatchMapping("/users/vip")
+    public ErrorResponse upgradeVip(HttpSession session, HttpServletResponse response) {
+        User user = (User) session.getAttribute("user");
+        user.setVip(user.getVip() + 1);
+        userService.updateById(user);
+
+        session.setAttribute("user", user);
+        response.setStatus(200);
+        return new ErrorResponse("");
     }
 }

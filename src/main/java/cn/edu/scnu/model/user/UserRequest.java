@@ -1,6 +1,6 @@
 package cn.edu.scnu.model.user;
 
-public class RegisterRequest {
+public class UserRequest {
     private String name;
     private String email;
     private String password;

@@ -57,4 +57,16 @@ public class UserService extends ServiceImpl<UserDao, User> {
         userDao.insert(user);
         return null;
     }
+
+    public String tryUpdate(User user) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email", user.getEmail());
+        User conflictEmailUser = userDao.selectOne(queryWrapper);
+        if (conflictEmailUser != null) {
+            return "该邮箱已被注册！";
+        }
+
+        userDao.updateById(user);
+        return null;
+    }
 }
