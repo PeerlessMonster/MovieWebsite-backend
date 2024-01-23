@@ -1,4 +1,4 @@
-package cn.edu.scnu.model.movie;
+package cn.edu.scnu.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

@@ -1,18 +1,19 @@
-package cn.edu.scnu.model.movie;
+package cn.edu.scnu.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
-@TableName("LatestMovieView")
-public class LatestMovie implements Serializable {
-    private static final long serialVersionUID = -4179950950079037337L;
-
+@TableName("PopularMovieView")
+public class MovieBriefIntro {
     @TableId()
     private Integer id;
     private String name;
+    private String category;
+    private Timestamp releaseTime;
+    private int playAmount;
     private float score;
 }

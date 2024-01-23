@@ -1,4 +1,4 @@
-package cn.edu.scnu.model.movie;
+package cn.edu.scnu.DTO;
 
 import java.util.List;
 

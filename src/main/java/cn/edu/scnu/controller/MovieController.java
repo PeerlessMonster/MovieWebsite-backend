@@ -1,12 +1,17 @@
 package cn.edu.scnu.controller;
 
-import cn.edu.scnu.model.ErrorResponse;
-import cn.edu.scnu.model.movie.*;
+import cn.edu.scnu.DTO.ErrorType;
+import cn.edu.scnu.DTO.SearchRequest;
+import cn.edu.scnu.VO.ErrorVO;
+import cn.edu.scnu.VO.MovieBriefIntroVO;
+import cn.edu.scnu.VO.MovieDetailVO;
+import cn.edu.scnu.entity.CarouselMovie;
+import cn.edu.scnu.entity.LatestMovie;
+import cn.edu.scnu.entity.TopScoreMovie;
 import cn.edu.scnu.service.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -44,13 +49,13 @@ public class MovieController {
     }
 
     @GetMapping("/movies/populars")
-    public List<MovieBriefIntroResponse> getPopular(HttpServletResponse response) {
+    public List<MovieBriefIntroVO> getPopular(HttpServletResponse response) {
         response.setStatus(200);
         return popularMovieService.selectAll();
     }
 
     @GetMapping("/movies/{id}")
-    public MovieDetailResponse searchOne(@PathVariable("id") int id, HttpServletResponse response) {
+    public MovieDetailVO searchOne(@PathVariable("id") int id, HttpServletResponse response) {
         response.setStatus(200);
         return movieDetailService.selectById(id);
     }
@@ -64,10 +69,10 @@ public class MovieController {
         String sortColumn = request.getSort();
         boolean isDescend = request.isDescend();
 
-        List<MovieBriefIntroResponse> movieResponseList = movieDetailService.selectWhere(categoryList, regionList, searchColumn, keyword, sortColumn, isDescend, offset, limit);
+        List<MovieBriefIntroVO> movieResponseList = movieDetailService.selectWhere(categoryList, regionList, searchColumn, keyword, sortColumn, isDescend, offset, limit);
         if (movieResponseList == null) {
             response.setStatus(404);
-            return new ErrorResponse("没有符合条件的结果！");
+            return new ErrorVO(ErrorType.MOVIE_NOT_EXIST);
         }
         response.setStatus(200);
         return movieResponseList;

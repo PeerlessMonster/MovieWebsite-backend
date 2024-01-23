@@ -1,29 +1,26 @@
 package cn.edu.scnu.service;
 
-import cn.edu.scnu.dao.MovieDetailDao;
-import cn.edu.scnu.model.movie.MovieBriefIntro;
-import cn.edu.scnu.model.movie.MovieBriefIntroResponse;
-import cn.edu.scnu.model.movie.MovieDetail;
-import cn.edu.scnu.model.movie.MovieDetailResponse;
-import cn.edu.scnu.util.TimestampFormat;
+import cn.edu.scnu.DAO.MovieDetailDAO;
+import cn.edu.scnu.VO.MovieBriefIntroVO;
+import cn.edu.scnu.entity.MovieDetail;
+import cn.edu.scnu.VO.MovieDetailVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MovieDetailService extends ServiceImpl<MovieDetailDao, MovieDetail> {
+public class MovieDetailService extends ServiceImpl<MovieDetailDAO, MovieDetail> {
     @Cacheable(cacheNames = "movie", key = "#id")
-    public MovieDetailResponse selectById(int id) {
+    public MovieDetailVO selectById(int id) {
         MovieDetail movie = this.getById(id);
-        return MovieDetailResponse.transform(movie);
+        return MovieDetailVO.transform(movie);
     }
 
-    public List<MovieBriefIntroResponse> selectWhere(List<String> categoryList, List<String> regionList, String searchColumn, String keyword, String sortColumn, boolean isDescend, int offset, int limit) {
+    public List<MovieBriefIntroVO> selectWhere(List<String> categoryList, List<String> regionList, String searchColumn, String keyword, String sortColumn, boolean isDescend, int offset, int limit) {
         QueryWrapper<MovieDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "name", "category", "release_time", "play_amount", "score");
 
@@ -48,9 +45,9 @@ public class MovieDetailService extends ServiceImpl<MovieDetailDao, MovieDetail>
             return null;
         }
 
-        List<MovieBriefIntroResponse> movieResponseList = new ArrayList<>();
+        List<MovieBriefIntroVO> movieResponseList = new ArrayList<>();
         for (MovieDetail movie: movieList) {
-            MovieBriefIntroResponse movieResponse = new MovieBriefIntroResponse(movie);
+            MovieBriefIntroVO movieResponse = new MovieBriefIntroVO(movie);
             movieResponseList.addLast(movieResponse);
         }
         return movieResponseList;

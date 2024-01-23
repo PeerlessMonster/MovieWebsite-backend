@@ -1,5 +1,6 @@
-package cn.edu.scnu.model.movie;
+package cn.edu.scnu.VO;
 
+import cn.edu.scnu.entity.MovieDetail;
 import cn.edu.scnu.util.TimestampFormat;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
-public class MovieDetailResponse implements Serializable {
+public class MovieDetailVO implements Serializable {
     private static final long serialVersionUID = 3449632624109750528L;
 
     private Integer id;
@@ -24,7 +25,7 @@ public class MovieDetailResponse implements Serializable {
     private float score;
     private int vip;
 
-    public MovieDetailResponse(Integer id, String name, String category, String region, String director, String scriptwriter, String actor, String releaseTime, int duration, String description, int playAmount, float score, int vip) {
+    public MovieDetailVO(Integer id, String name, String category, String region, String director, String scriptwriter, String actor, String releaseTime, int duration, String description, int playAmount, float score, int vip) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -40,11 +41,11 @@ public class MovieDetailResponse implements Serializable {
         this.vip = vip;
     }
 
-    public static MovieDetailResponse transform(MovieDetail movieDetail) {
+    public static MovieDetailVO transform(MovieDetail movieDetail) {
         Timestamp timestamp = movieDetail.getReleaseTime();
         String releaseTime = TimestampFormat.formatString(timestamp);
 
-        return new MovieDetailResponse(
+        return new MovieDetailVO(
                 movieDetail.getId(),
                 movieDetail.getName(),
                 movieDetail.getCategory(),

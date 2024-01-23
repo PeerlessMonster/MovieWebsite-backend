@@ -1,4 +1,4 @@
-package cn.edu.scnu.model.user;
+package cn.edu.scnu.DTO;
 
 public class UserRequest {
     private String name;
