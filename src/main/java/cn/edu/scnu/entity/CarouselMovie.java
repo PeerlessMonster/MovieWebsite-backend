@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class CarouselMovie implements Serializable {
     private static final long serialVersionUID = -8319055271091465535L;
 
-    @TableId()
+    @TableId
     private Integer id;
     private String name;
 }

@@ -1,6 +1,6 @@
 package cn.edu.scnu.VO;
 
-import cn.edu.scnu.entity.MovieDetail;
+import cn.edu.scnu.DTO.MovieDetailResponse;
 import cn.edu.scnu.util.TimestampFormat;
 import lombok.Data;
 
@@ -25,40 +25,22 @@ public class MovieDetailVO implements Serializable {
     private float score;
     private int vip;
 
-    public MovieDetailVO(Integer id, String name, String category, String region, String director, String scriptwriter, String actor, String releaseTime, int duration, String description, int playAmount, float score, int vip) {
-        this.id = id;
-        this.name = name;
-        this.category = category;
-        this.region = region;
-        this.director = director;
-        this.scriptwriter = scriptwriter;
-        this.actor = actor;
-        this.releaseTime = releaseTime;
-        this.duration = duration;
-        this.description = description;
-        this.playAmount = playAmount;
-        this.score = score;
-        this.vip = vip;
-    }
-
-    public static MovieDetailVO transform(MovieDetail movieDetail) {
-        Timestamp timestamp = movieDetail.getReleaseTime();
+    public MovieDetailVO(MovieDetailResponse movie) {
+        Timestamp timestamp = movie.getReleaseTime();
         String releaseTime = TimestampFormat.formatString(timestamp);
 
-        return new MovieDetailVO(
-                movieDetail.getId(),
-                movieDetail.getName(),
-                movieDetail.getCategory(),
-                movieDetail.getRegion(),
-                movieDetail.getDirector(),
-                movieDetail.getScriptwriter(),
-                movieDetail.getActor(),
-                releaseTime,
-                movieDetail.getDuration(),
-                movieDetail.getDescription(),
-                movieDetail.getPlayAmount(),
-                movieDetail.getScore(),
-                movieDetail.getVip()
-        );
+        this.id = movie.getId();
+        this.name = movie.getName();
+        this.category = movie.getCategory();
+        this.region = movie.getRegion();
+        this.director = movie.getDirector();
+        this.scriptwriter = movie.getScriptwriter();
+        this.actor = movie.getActor();
+        this.releaseTime = releaseTime;
+        this.duration = movie.getDuration();
+        this.description = movie.getDescription();
+        this.playAmount = movie.getPlayAmount();
+        this.score = movie.getScore();
+        this.vip = movie.getVip();
     }
 }

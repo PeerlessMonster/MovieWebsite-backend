@@ -1,6 +1,6 @@
 package cn.edu.scnu.VO;
 
-import cn.edu.scnu.DTO.ErrorType;
+import cn.edu.scnu.DTO.ErrorResponse;
 
 public class ErrorVO {
     private static final String[] typeToMessage = new String[]{
@@ -9,12 +9,13 @@ public class ErrorVO {
         "账号不存在！",
         "该邮箱已被注册！",
         "密码错误！",
+        "新密码与旧密码相同！",
         "没有符合条件的结果！"
     };
 
     private String message;
 
-    public ErrorVO(ErrorType errorType) {
+    public ErrorVO(ErrorResponse errorType) {
         this.message = typeToMessage[errorType.ordinal()];
     }
 

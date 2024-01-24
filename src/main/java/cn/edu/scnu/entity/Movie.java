@@ -1,15 +1,15 @@
 package cn.edu.scnu.entity;
 
+import cn.edu.scnu.DTO.MovieBriefResponse;
+import cn.edu.scnu.DTO.MovieDetailResponse;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Data
-@TableName("movie")
-public class MovieDetail extends MovieBriefIntro {
+public class Movie implements MovieBriefResponse, MovieDetailResponse {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name;

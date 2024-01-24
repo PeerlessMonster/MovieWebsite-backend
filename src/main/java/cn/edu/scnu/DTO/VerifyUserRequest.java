@@ -1,6 +1,6 @@
 package cn.edu.scnu.DTO;
 
-public class LoginRequest {
+public class VerifyUserRequest {
     private String username;
     private String password;
     private boolean remember;

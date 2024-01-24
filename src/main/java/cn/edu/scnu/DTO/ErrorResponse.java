@@ -1,0 +1,5 @@
+package cn.edu.scnu.DTO;
+
+public enum ErrorResponse {
+    NONE, SESSION_NOT_EXIST, USERNAME_NOT_EXIST, EMAIL_EXIST, PASSWORD_WRONG, PASSWORD_SAME, MOVIE_NOT_EXIST;
+}

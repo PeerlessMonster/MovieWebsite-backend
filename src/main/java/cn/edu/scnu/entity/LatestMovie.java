@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class LatestMovie implements Serializable {
     private static final long serialVersionUID = -4179950950079037337L;
 
-    @TableId()
+    @TableId
     private Integer id;
     private String name;
     private float score;

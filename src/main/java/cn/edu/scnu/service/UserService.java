@@ -1,8 +1,7 @@
 package cn.edu.scnu.service;
 
 import cn.edu.scnu.DAO.UserDAO;
-import cn.edu.scnu.DTO.ErrorType;
-import cn.edu.scnu.VO.ErrorVO;
+import cn.edu.scnu.DTO.ErrorResponse;
 import cn.edu.scnu.entity.User;
 import cn.edu.scnu.util.Password;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,57 +10,47 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService extends ServiceImpl<UserDAO, User> {
-    private UserDAO userDao;
-
-    public UserService(UserDAO userDao) {
-        this.userDao = userDao;
-    }
-
-    private User servingUser;
-    private boolean checkEmailExist(String email) {
+    private User selectUserByEmail(String email) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("email", email);
-        User user = userDao.selectOne(queryWrapper);
-        if (user == null) {
-            return false;
-        }
-        servingUser = user;
-        return true;
+        return this.getOne(queryWrapper);
     }
 
-    public ErrorType verifyPassword(int userId, String password) {
+
+    public User getUser(String username) {
+        return selectUserByEmail(username);
+    }
+
+    public ErrorResponse verifyPassword(int userId, String password) {
         User user = this.getById(userId);
 
         String passwordHash = user.getPasswordHash();
         if (!Password.decrypt(password, passwordHash)) {
-            return ErrorType.PASSWORD_WRONG;
+            return ErrorResponse.PASSWORD_WRONG;
         }
-        return ErrorType.NONE;
+        return ErrorResponse.NONE;
     }
 
-    public ErrorType verify(String username, String password) {
-        if (!checkEmailExist(username)) {
-            return ErrorType.USERNAME_NOT_EXIST;
+    public ErrorResponse verify(String username, String password) {
+        User user = selectUserByEmail(username);
+        if (user == null) {
+            return ErrorResponse.USERNAME_NOT_EXIST;
         }
 
-        String passwordHash = servingUser.getPasswordHash();
+        String passwordHash = user.getPasswordHash();
         if (!Password.decrypt(password, passwordHash)) {
-            return ErrorType.PASSWORD_WRONG;
+            return ErrorResponse.PASSWORD_WRONG;
         }
-        return ErrorType.NONE;
+        return ErrorResponse.NONE;
     }
 
-    public User selectUserByUsername(String username) {
-        checkEmailExist(username);
-        return servingUser;
-    }
-
-    public ErrorType create(String name, String email, String password) {
-        if (checkEmailExist(email)) {
-            return ErrorType.EMAIL_EXIST;
+    public ErrorResponse create(String name, String email, String password) {
+        User user = selectUserByEmail(email);
+        if (user != null) {
+            return ErrorResponse.EMAIL_EXIST;
         }
+        user = new User();
 
-        User user = new User();
         String passwordHash = Password.encrypt(password);
         user.setPasswordHash(passwordHash);
         user.setEmail(email);
@@ -70,19 +59,34 @@ public class UserService extends ServiceImpl<UserDAO, User> {
             user.setName(name);
         }
 
-        userDao.insert(user);
-        return ErrorType.NONE;
+        this.save(user);
+        return ErrorResponse.NONE;
     }
 
-    public ErrorType update(int userId, String name, String email) {
-        if (checkEmailExist(email)) {
-            return ErrorType.EMAIL_EXIST;
+    public ErrorResponse update(int userId, String name, String email) {
+        User user = selectUserByEmail(email);
+        if (user != null) {
+            return ErrorResponse.EMAIL_EXIST;
         }
 
-        User user = this.getById(userId);
+        user = this.getById(userId);
         user.setName(name);
         user.setEmail(email);
-        userDao.updateById(user);
-        return ErrorType.NONE;
+        this.updateById(user);
+        return ErrorResponse.NONE;
+    }
+
+    public ErrorResponse updatePassword(int userId, String password) {
+        User user = this.getById(userId);
+
+        String passwordHash = user.getPasswordHash();
+        if (Password.decrypt(password, passwordHash)) {
+            return ErrorResponse.PASSWORD_SAME;
+        }
+
+        passwordHash = Password.encrypt(password);
+        user.setPasswordHash(passwordHash);
+        this.updateById(user);
+        return ErrorResponse.NONE;
     }
 }
