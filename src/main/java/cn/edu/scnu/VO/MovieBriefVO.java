@@ -1,7 +1,7 @@
 package cn.edu.scnu.VO;
 
 import cn.edu.scnu.DTO.MovieBriefResponse;
-import cn.edu.scnu.util.TimestampFormat;
+import cn.edu.scnu.util.DateFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,7 +20,7 @@ public class MovieBriefVO implements Serializable {
 
     public MovieBriefVO(MovieBriefResponse movie) {
         Timestamp timestamp = movie.getReleaseTime();
-        String releaseTime = TimestampFormat.formatString(timestamp);
+        String releaseTime = DateFormat.formatString(timestamp);
 
         this.id = movie.getId();
         this.name = movie.getName();

@@ -1,5 +1,6 @@
 package cn.edu.scnu.entity;
 
+import cn.edu.scnu.DTO.UserResponse;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
@@ -7,7 +8,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class User implements Serializable {
+public class User implements UserResponse, Serializable {
     private static final long serialVersionUID = 1177319214665217813L;
 
     @TableId(type = IdType.AUTO)

@@ -4,8 +4,11 @@ import cn.edu.scnu.DTO.ErrorResponse;
 import cn.edu.scnu.VO.ErrorVO;
 import cn.edu.scnu.DTO.VerifyUserRequest;
 import cn.edu.scnu.DTO.UserInfoRequest;
+import cn.edu.scnu.VO.UserVO;
+import cn.edu.scnu.config.SessionConfig;
 import cn.edu.scnu.entity.User;
 import cn.edu.scnu.service.UserService;
+import cn.edu.scnu.util.ExpireTime;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
@@ -56,12 +59,15 @@ public class UserController {
         User user = userService.getUser(username);
         user.setPasswordHash(null);
         session.setAttribute("user", user);
+        int maxInactiveIntervalS = SessionConfig.EXPIRE;
         if (isRemember) {
-            session.setMaxInactiveInterval(604800);
-            // 604800 seconds = 7 days
+            maxInactiveIntervalS = SessionConfig.EXPIRE_REMEMBER;
+            session.setMaxInactiveInterval(maxInactiveIntervalS);
         }
+        long expireMillis = maxInactiveIntervalS * 1000;
+
         response.setStatus(201);
-        return user;
+        return new UserVO(user, expireMillis);
     }
 
     @PostMapping("/users/passwords")
@@ -88,7 +94,19 @@ public class UserController {
             return new ErrorVO(ErrorResponse.SESSION_NOT_EXIST);
         }
         response.setStatus(200);
-        return user;
+        long expireMillis;
+
+        int maxInactiveIntervalS = session.getMaxInactiveInterval();
+        if (maxInactiveIntervalS == SessionConfig.EXPIRE) {
+            expireMillis = maxInactiveIntervalS * 1000;
+        } else {
+            long createTimeMillis = session.getCreationTime();
+            expireMillis = ExpireTime.calculate(maxInactiveIntervalS, createTimeMillis);
+            /* 访问了就会重置ttl为maxInactiveInterval，故重新设置 */
+            maxInactiveIntervalS = (int) (expireMillis / 1000);
+            session.setMaxInactiveInterval(maxInactiveIntervalS);
+        }
+        return new UserVO(user, expireMillis);
     }
 
     @PatchMapping("/users")
