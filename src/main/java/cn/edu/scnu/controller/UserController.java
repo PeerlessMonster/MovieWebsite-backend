@@ -59,14 +59,11 @@ public class UserController {
         User user = userService.getUser(username);
         user.setPasswordHash(null);
         session.setAttribute("user", user);
-        int maxInactiveIntervalS = SessionConfig.EXPIRE;
-        if (isRemember) {
-            maxInactiveIntervalS = SessionConfig.EXPIRE_REMEMBER;
-            session.setMaxInactiveInterval(maxInactiveIntervalS);
-        }
-        long expireMillis = maxInactiveIntervalS * 1000;
+        int maxInactiveIntervalS = isRemember ? SessionConfig.EXPIRE_REMEMBER : SessionConfig.EXPIRE;
+        session.setMaxInactiveInterval(maxInactiveIntervalS);
 
         response.setStatus(201);
+        long expireMillis = maxInactiveIntervalS * 1000;
         return new UserVO(user, expireMillis);
     }
 
@@ -94,15 +91,15 @@ public class UserController {
             return new ErrorVO(ErrorResponse.SESSION_NOT_EXIST);
         }
         response.setStatus(200);
-        long expireMillis;
 
         int maxInactiveIntervalS = session.getMaxInactiveInterval();
-        if (maxInactiveIntervalS == SessionConfig.EXPIRE) {
-            expireMillis = maxInactiveIntervalS * 1000;
-        } else {
+        /* 不勾选“记住我”，session的ttl为30分钟，相当于每执行一次该方法（刷新）就重置回30分钟 */
+        long expireMillis = maxInactiveIntervalS * 1000;
+        /* “记住我”，session的ttl为7天 */
+        if (maxInactiveIntervalS == SessionConfig.EXPIRE_REMEMBER) {
             long createTimeMillis = session.getCreationTime();
             expireMillis = ExpireTime.calculate(maxInactiveIntervalS, createTimeMillis);
-            /* 访问了就会重置ttl为maxInactiveInterval，故重新设置 */
+            /* 访问session就会重置其ttl为maxInactiveInterval，故重新设置 */
             maxInactiveIntervalS = (int) (expireMillis / 1000);
             session.setMaxInactiveInterval(maxInactiveIntervalS);
         }

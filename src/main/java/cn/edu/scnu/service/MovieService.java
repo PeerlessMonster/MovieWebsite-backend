@@ -77,6 +77,8 @@ public class MovieService extends ServiceImpl<MovieDAO, Movie> {
         }
         /* 第一个true表示开启排序 */
         queryWrapper.orderBy(true, !isDescend, sortColumn);
+        /* ORDER BY和LIMIT组合，MySQL会用堆排序（不稳定）优化，故添加索引字段 */
+        queryWrapper.orderByAsc("id");
         queryWrapper.last("LIMIT " + offset + "," + limit);
 
         List<Movie> movieList = this.list(queryWrapper);

@@ -1,6 +1,10 @@
 package cn.edu.scnu.util;
 
 public class ExpireTime {
+    /**
+     *
+     * @return expireMillis
+     */
     public static long calculate(int maxLiveTimeS, long createTimeMillis) {
         long maxLiveTimeMillis = maxLiveTimeS * 1000L;
 
