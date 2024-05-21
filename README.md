@@ -32,8 +32,4 @@
 - 数据库：[MySQL](https://www.mysql.com/)
 - 缓存：[Redis](https://redis.io/)
 
-### 素材
-- resources/static/images/movies下，1_m.webp（中号竖版海报）、1_l.webp（大号横板海报）……  
-  所有影片的海报来自[豆瓣](https://www.douban.com/)，此处不提供
-
 无商业用途！仅作学习Web后端开发
